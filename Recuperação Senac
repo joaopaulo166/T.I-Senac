@@ -1,1 +1,102 @@
+Recuperação Senac - João Paulo Da Silva Ferreira
 
+Atividades 5 e 7 propostas pelo Professor Estevão Rada Oliveira
+
+5 - Crie um programa que leia o nome do usuário em um TextBox e, ao
+clicar no botão “Confirmar” apresente em um label uma mensagem de
+boas vindas. 
+
+Resposta: Código:
+private void btnConfirmar_Click(object sender, EventArgs e)
+{
+    string nome = txtNome.Text;
+    if (!string.IsNullOrWhiteSpace(nome))
+    {
+        lblMensagem.Text = $"Bem-vindo, {nome}!";
+    }
+    else
+    {
+        lblMensagem.Text = "Por favor, insira seu nome!";
+    }
+}
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+7 - Pesquise sobre TIMER no C#. Implemente um software de controle de
+trânsito com os seguintes botões: [LIGAR] [DESLIGAR] [SAIR]. 
+Ao clicar no botão [LIGAR], o software deverá apresentar uma
+imagem de semáforo vermelho, e após 5 segundos mudar para outra
+imagem com o semáforo verde. Após apresentar o semáforo verde,
+deverá mudar para o laranja após 10 segundos e em seguida, após 3
+segundos, mudar para o vermelho.
+O laço acima deverá repetir infinitamente até o usuário pressionar o botão
+[DESLIGAR].
+O botão [SAIR] deverá encerrar o programa. 
+
+Respota: Código:
+using System;
+using System.Windows.Forms;
+
+namespace ControleDeTransito
+{
+    public partial class Form1 : Form
+    {
+        private Timer semaforoTimer;
+        private int contador = 0;
+        private string[] urlsSemaforo = {
+            "https://i.ibb.co/pbPW058/using-System-using-System-Drawing-using-System-Net-using-System-Windows-Forms-namespace-Controle-De.png", // Amarelo
+            "https://i.ibb.co/J29ynLS/using-System-using-System-Drawing-using-System-Net-using-System-Windows-Forms-namespace-Controle-De.png", // Vermelho
+            "https://i.ibb.co/BgFYmZv/using-System-using-System-Drawing-using-System-Net-using-System-Windows-Forms-namespace-Controle-De.png"  // Verde
+        };
+
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void btnLigar_Click(object sender, EventArgs e)
+        {
+            semaforoTimer = new Timer();
+            semaforoTimer.Interval = 5000; // 5 segundos
+            semaforoTimer.Tick += MudarSemaforo;
+            semaforoTimer.Start();
+        }
+
+        private void MudarSemaforo(object sender, EventArgs e)
+        {
+            if (contador < urlsSemaforo.Length)
+            {
+                pictureBoxSemaforo.Load(urlsSemaforo[contador]);
+                contador++;
+            }
+            else
+            {
+                contador = 0;
+                pictureBoxSemaforo.Load(urlsSemaforo[contador]);
+                contador++;
+            }
+
+            if (contador == 2)
+            {
+                semaforoTimer.Interval = 3000; // 3 segundos para mudar para o vermelho novamente
+            }
+        }
+
+        private void btnDesligar_Click(object sender, EventArgs e)
+        {
+            if (semaforoTimer != null)
+            {
+                semaforoTimer.Stop();
+                pictureBoxSemaforo.Image = null;
+                contador = 0;
+            }
+        }
+
+        private void btnSair_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+    }
+}
