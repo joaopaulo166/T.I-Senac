@@ -1,0 +1,64 @@
+using System;
+using System.Windows.Forms;
+
+namespace ControleDeTransito
+{
+    public partial class Form1 : Form
+    {
+        private Timer semaforoTimer;
+        private int contador = 0;
+        private string[] urlsSemaforo = {
+            "https://i.ibb.co/pbPW058/using-System-using-System-Drawing-using-System-Net-using-System-Windows-Forms-namespace-Controle-De.png", // Amarelo
+            "https://i.ibb.co/J29ynLS/using-System-using-System-Drawing-using-System-Net-using-System-Windows-Forms-namespace-Controle-De.png", // Vermelho
+            "https://i.ibb.co/BgFYmZv/using-System-using-System-Drawing-using-System-Net-using-System-Windows-Forms-namespace-Controle-De.png"  // Verde
+        };
+
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void btnLigar_Click(object sender, EventArgs e)
+        {
+            semaforoTimer = new Timer();
+            semaforoTimer.Interval = 5000; // 5 segundos
+            semaforoTimer.Tick += MudarSemaforo;
+            semaforoTimer.Start();
+        }
+
+        private void MudarSemaforo(object sender, EventArgs e)
+        {
+            if (contador < urlsSemaforo.Length)
+            {
+                pictureBoxSemaforo.Load(urlsSemaforo[contador]);
+                contador++;
+            }
+            else
+            {
+                contador = 0;
+                pictureBoxSemaforo.Load(urlsSemaforo[contador]);
+                contador++;
+            }
+
+            if (contador == 2)
+            {
+                semaforoTimer.Interval = 3000; // 3 segundos para mudar para o vermelho novamente
+            }
+        }
+
+        private void btnDesligar_Click(object sender, EventArgs e)
+        {
+            if (semaforoTimer != null)
+            {
+                semaforoTimer.Stop();
+                pictureBoxSemaforo.Image = null;
+                contador = 0;
+            }
+        }
+
+        private void btnSair_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+    }
+}
